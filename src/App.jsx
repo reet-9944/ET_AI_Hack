@@ -13,10 +13,10 @@ function App() {
       {/* Animated Background */}
       <div className="cyber-grid"></div>
 
-      <nav className="navbar">
+      <aside className="sidebar">
         <div className="brand" style={{cursor: 'pointer'}} onClick={() => setActiveView('home')}>
-          <ShieldAlert className="brand-icon" size={28} />
-          <span className="text-gradient">Sentinel: Digital Shield</span>
+          <ShieldAlert className="brand-icon" size={32} />
+          <span className="text-gradient brand-text">Sentinel</span>
         </div>
         
         <div className="nav-links">
@@ -24,31 +24,41 @@ function App() {
             className={`nav-item ${activeView === 'home' ? 'active' : ''}`}
             onClick={() => setActiveView('home')}
           >
-            <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-              <Home size={18} />
-              Home
+            <div className="nav-item-content">
+              <Home size={20} />
+              <span>Overview</span>
             </div>
           </div>
           <div 
             className={`nav-item ${activeView === 'citizen' ? 'active' : ''}`}
             onClick={() => setActiveView('citizen')}
           >
-            <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-              <Shield size={18} />
-              Citizen Portal
+            <div className="nav-item-content">
+              <Shield size={20} />
+              <span>Citizen Shield</span>
             </div>
           </div>
           <div 
             className={`nav-item ${activeView === 'police' ? 'active' : ''}`}
             onClick={() => setActiveView('police')}
           >
-            <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-              <Activity size={18} />
-              Command Center
+            <div className="nav-item-content">
+              <Activity size={20} />
+              <span>Command Center</span>
             </div>
           </div>
         </div>
-      </nav>
+        
+        <div className="sidebar-footer">
+          <div className="user-profile">
+            <div className="avatar">AD</div>
+            <div className="user-info">
+              <span className="user-name">Admin User</span>
+              <span className="user-role">System Access</span>
+            </div>
+          </div>
+        </div>
+      </aside>
 
       <main className="main-content">
         {activeView === 'home' && <LandingPage onNavigate={setActiveView} />}

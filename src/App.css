@@ -1,57 +1,117 @@
 .app-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   min-height: 100vh;
 }
 
-.navbar {
+.sidebar {
+  width: 280px;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid var(--glass-border);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: var(--bg-panel);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--glass-border);
+  flex-direction: column;
+  padding: 2rem 1.5rem;
   position: sticky;
   top: 0;
+  height: 100vh;
   z-index: 100;
+  box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   letter-spacing: -0.02em;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .brand-icon {
   color: var(--accent-blue);
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
 }
 
 .nav-links {
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
 }
 
 .nav-item {
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
+  padding: 1rem;
+  border-radius: var(--radius-md);
   color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.nav-item-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.05rem;
 }
 
 .nav-item:hover {
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.05);
+  transform: translateX(4px);
 }
 
 .nav-item.active {
   color: var(--accent-blue);
   background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: inset 4px 0 0 var(--accent-blue);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.user-role {
+  font-size: 0.8rem;
+  color: var(--accent-green);
 }
 
 .main-content {
