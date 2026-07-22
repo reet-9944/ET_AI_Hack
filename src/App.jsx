@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Shield, ShieldAlert, Activity, Home } from 'lucide-react';
+import { Shield, ShieldAlert, Activity, Home, Menu, ChevronLeft } from 'lucide-react';
 import './App.css';
 import LandingPage from './components/LandingPage';
 import CitizenPortal from './components/CitizenPortal';
@@ -7,55 +7,66 @@ import PoliceDashboard from './components/PoliceDashboard';
 
 function App() {
   const [activeView, setActiveView] = useState('home'); // 'home', 'citizen' or 'police'
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
     <div className="app-container">
       {/* Animated Background */}
       <div className="cyber-grid"></div>
 
-      <aside className="sidebar">
-        <div className="brand" style={{cursor: 'pointer'}} onClick={() => setActiveView('home')}>
-          <ShieldAlert className="brand-icon" size={32} />
-          <span className="text-gradient brand-text">Sentinel</span>
+      <aside className={`sidebar ${isSidebarOpen ? '' : 'collapsed'}`}>
+        <div className="sidebar-header" style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '3rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(255, 255, 255, 0.05)'}}>
+          <div className="brand" style={{cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '1rem', margin: 0, padding: 0, border: 'none'}} onClick={() => setActiveView('home')}>
+            <ShieldAlert className="brand-icon" size={32} style={{minWidth: '32px'}} />
+            {isSidebarOpen && <span className="text-gradient brand-text" style={{fontSize: '1.5rem', fontWeight: 700}}>Sentinel</span>}
+          </div>
+          <button className="btn-link" style={{color: 'var(--text-muted)', padding: '0.5rem'}} onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            {isSidebarOpen ? <ChevronLeft size={20} /> : <Menu size={20} />}
+          </button>
         </div>
         
         <div className="nav-links">
           <div 
             className={`nav-item ${activeView === 'home' ? 'active' : ''}`}
             onClick={() => setActiveView('home')}
+            title="Overview"
           >
             <div className="nav-item-content">
-              <Home size={20} />
-              <span>Overview</span>
+              <Home size={20} style={{minWidth: '20px'}} />
+              {isSidebarOpen && <span>Overview</span>}
             </div>
           </div>
           <div 
             className={`nav-item ${activeView === 'citizen' ? 'active' : ''}`}
             onClick={() => setActiveView('citizen')}
+            title="Citizen Shield"
           >
             <div className="nav-item-content">
-              <Shield size={20} />
-              <span>Citizen Shield</span>
+              <Shield size={20} style={{minWidth: '20px'}} />
+              {isSidebarOpen && <span>Citizen Shield</span>}
             </div>
           </div>
           <div 
             className={`nav-item ${activeView === 'police' ? 'active' : ''}`}
             onClick={() => setActiveView('police')}
+            title="Command Center"
           >
             <div className="nav-item-content">
-              <Activity size={20} />
-              <span>Command Center</span>
+              <Activity size={20} style={{minWidth: '20px'}} />
+              {isSidebarOpen && <span>Command Center</span>}
             </div>
           </div>
         </div>
         
         <div className="sidebar-footer">
-          <div className="user-profile">
-            <div className="avatar">AD</div>
-            <div className="user-info">
-              <span className="user-name">Admin User</span>
-              <span className="user-role">System Access</span>
-            </div>
+          <div className="user-profile" style={{justifyContent: isSidebarOpen ? 'flex-start' : 'center'}}>
+            <div className="avatar" style={{minWidth: '40px'}}>AD</div>
+            {isSidebarOpen && (
+              <div className="user-info">
+                <span className="user-name">Admin User</span>
+                <span className="user-role">System Access</span>
+              </div>
+            )}
           </div>
         </div>
       </aside>
