@@ -76,13 +76,31 @@ const CitizenPortal = () => {
             <p className="text-muted" style={{marginBottom: '2rem'}}>Upload an audio recording or paste a message. Our NLP engine will analyze coercive language patterns (e.g., fake CBI/Customs threats) with near-zero false positives.</p>
             
             {scanStatus === 'idle' && (
-              <div className="upload-zone interactive-hover" onClick={triggerAudioUpload}>
-                <input type="file" ref={audioInputRef} style={{display: 'none'}} accept="audio/*,image/*" onChange={simulateScan} />
-                <Upload size={48} className="text-muted" style={{marginBottom: '1rem'}} />
-                <h3>Drop Audio Recording or Screenshot Here</h3>
-                <p className="text-muted">or click to browse</p>
-                <div className="demo-hint">Demo: Select any file to simulate the AI scanning process</div>
-              </div>
+              <>
+                <div className="text-input-container" style={{marginBottom: '2rem', textAlign: 'left'}}>
+                  <label className="text-muted" style={{display: 'block', marginBottom: '0.5rem', fontWeight: 600}}>Paste Message to Analyze:</label>
+                  <textarea 
+                    className="scam-textarea" 
+                    placeholder="e.g., 'URGENT: Your parcel has been seized by Customs. Click here or face immediate arrest...'"
+                    style={{width: '100%', height: '100px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', color: '#fff', padding: '1rem', borderRadius: '8px', marginBottom: '1rem'}}
+                  ></textarea>
+                  <button className="btn btn-primary" style={{width: '100%'}} onClick={() => simulateScan({target: {files: ['text']}})}>Run AI Text Analysis</button>
+                </div>
+                
+                <div style={{display: 'flex', alignItems: 'center', gap: '1rem', margin: '2rem 0'}}>
+                  <hr style={{flex: 1, borderColor: 'var(--glass-border)'}} />
+                  <span className="text-muted">OR</span>
+                  <hr style={{flex: 1, borderColor: 'var(--glass-border)'}} />
+                </div>
+
+                <div className="upload-zone interactive-hover" onClick={triggerAudioUpload}>
+                  <input type="file" ref={audioInputRef} style={{display: 'none'}} accept="audio/*,image/*" onChange={simulateScan} />
+                  <Upload size={48} className="text-muted" style={{marginBottom: '1rem'}} />
+                  <h3>Drop Audio Recording or Screenshot Here</h3>
+                  <p className="text-muted">or click to browse</p>
+                  <div className="demo-hint">Demo: Select any file to simulate the AI scanning process</div>
+                </div>
+              </>
             )}
 
             {scanStatus === 'scanning' && (
