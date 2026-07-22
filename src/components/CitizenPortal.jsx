@@ -1,23 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ShieldCheck, Scan, MessageSquareWarning, Languages, Upload, AlertTriangle, CheckCircle, Camera } from 'lucide-react';
 import './CitizenPortal.css';
 
 const CitizenPortal = () => {
   const [activeTab, setActiveTab] = useState('scam-check'); // scam-check, counterfeit
   const [scanStatus, setScanStatus] = useState('idle'); // idle, scanning, safe, danger
+  const audioInputRef = useRef(null);
+  const imageInputRef = useRef(null);
 
-  const simulateScan = () => {
+  const simulateScan = (e) => {
+    // Only trigger if they actually selected a file, or if we bypass it
+    if (e && e.target && e.target.files && e.target.files.length === 0) return;
+    
     setScanStatus('scanning');
     setTimeout(() => {
       setScanStatus('danger');
     }, 2500);
   };
 
-  const simulateCurrencyScan = () => {
+  const simulateCurrencyScan = (e) => {
+    if (e && e.target && e.target.files && e.target.files.length === 0) return;
+
     setScanStatus('scanning');
     setTimeout(() => {
       setScanStatus('safe');
     }, 2500);
+  };
+
+  const triggerAudioUpload = () => {
+    audioInputRef.current.click();
+  };
+
+  const triggerImageUpload = () => {
+    imageInputRef.current.click();
   };
 
   return (
@@ -52,11 +67,12 @@ const CitizenPortal = () => {
             <p className="text-muted" style={{marginBottom: '2rem'}}>Upload an audio recording or paste a message. Our NLP engine will analyze coercive language patterns (e.g., fake CBI/Customs threats) with near-zero false positives.</p>
             
             {scanStatus === 'idle' && (
-              <div className="upload-zone interactive-hover" onClick={simulateScan}>
+              <div className="upload-zone interactive-hover" onClick={triggerAudioUpload}>
+                <input type="file" ref={audioInputRef} style={{display: 'none'}} accept="audio/*,image/*" onChange={simulateScan} />
                 <Upload size={48} className="text-muted" style={{marginBottom: '1rem'}} />
                 <h3>Drop Audio Recording or Screenshot Here</h3>
                 <p className="text-muted">or click to browse</p>
-                <div className="demo-hint">Demo: Click to simulate scanning a "Digital Arrest" audio clip</div>
+                <div className="demo-hint">Demo: Select any file to simulate the AI scanning process</div>
               </div>
             )}
 
@@ -95,11 +111,12 @@ const CitizenPortal = () => {
             <p className="text-muted" style={{marginBottom: '2rem'}}>Deployable on mobile or bank POS. Uses computer vision to verify microprint, security threads, and serial number patterns.</p>
             
             {scanStatus === 'idle' && (
-              <div className="upload-zone interactive-hover" onClick={simulateCurrencyScan}>
+              <div className="upload-zone interactive-hover" onClick={triggerImageUpload}>
+                <input type="file" ref={imageInputRef} style={{display: 'none'}} accept="image/*" onChange={simulateCurrencyScan} capture="environment" />
                 <Camera size={48} className="text-muted" style={{marginBottom: '1rem'}} />
                 <h3>Take a Photo of Currency Note</h3>
-                <p className="text-muted">Align the ₹500 note within the frame</p>
-                <div className="demo-hint">Demo: Click to simulate scanning a valid ₹500 note</div>
+                <p className="text-muted">Align the ₹500 note within the frame (Click to upload/open camera)</p>
+                <div className="demo-hint">Demo: Select any image to simulate scanning a valid ₹500 note</div>
               </div>
             )}
 
