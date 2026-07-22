@@ -21,9 +21,18 @@ const CitizenPortal = () => {
   const simulateCurrencyScan = (e) => {
     if (e && e.target && e.target.files && e.target.files.length === 0) return;
 
+    // For the hackathon demo, if the filename contains 'fake', 'nkli', or 'demo', flag it as counterfeit
+    let isCounterfeit = true; // Default to showing the counterfeit detection for the demo
+    if (e && e.target && e.target.files && e.target.files[0]) {
+      const fileName = e.target.files[0].name.toLowerCase();
+      if (fileName.includes('real') || fileName.includes('genuine')) {
+        isCounterfeit = false;
+      }
+    }
+
     setScanStatus('scanning');
     setTimeout(() => {
-      setScanStatus('safe');
+      setScanStatus(isCounterfeit ? 'counterfeit_danger' : 'safe');
     }, 2500);
   };
 
@@ -139,6 +148,23 @@ const CitizenPortal = () => {
                   <p><strong>Micro-lettering:</strong> Legible ('RBI' and 'भारत')</p>
                 </div>
                 <button className="btn btn-primary" style={{marginTop: '1.5rem', background: 'var(--accent-green)', borderColor: 'var(--accent-green)'}} onClick={() => setScanStatus('idle')}>Scan Next Note</button>
+              </div>
+            )}
+
+            {scanStatus === 'counterfeit_danger' && (
+              <div className="result-zone danger animate-pop">
+                <AlertTriangle size={64} color="var(--accent-red)" style={{marginBottom: '1rem'}} />
+                <h3 style={{color: 'var(--accent-red)', fontSize: '1.5rem'}}>WARNING: Counterfeit Currency Detected</h3>
+                <div className="analysis-details" style={{borderColor: 'var(--accent-red)'}}>
+                  <p><strong>Anomaly 1:</strong> Security Thread color shift failed (Static green).</p>
+                  <p><strong>Anomaly 2:</strong> Missing Omron anti-photocopy feature patterns.</p>
+                  <p><strong>Anomaly 3:</strong> Micro-lettering blurred at 400x magnification.</p>
+                  <p><strong>Confidence:</strong> 99.2% probability of Fake Indian Currency Note (FICN).</p>
+                </div>
+                <div className="action-buttons">
+                  <button className="btn btn-primary" style={{background: 'var(--accent-red)'}}>Alert Branch Manager</button>
+                  <button className="btn btn-outline" onClick={() => setScanStatus('idle')}>Scan Next Note</button>
+                </div>
               </div>
             )}
           </div>
