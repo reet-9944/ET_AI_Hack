@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, Phone, Users, AlertOctagon, TrendingUp, Filter } from 'lucide-react';
+import { MapPin, Phone, Users, AlertOctagon, TrendingUp, Filter, Network } from 'lucide-react';
 import './PoliceDashboard.css';
 
 const PoliceDashboard = () => {
@@ -59,22 +59,27 @@ const PoliceDashboard = () => {
       <div className="dashboard-main-grid">
         <div className="map-panel glass-panel">
           <div className="panel-header">
-            <MapPin size={20} className="text-muted" />
-            <h2 className="heading-2" style={{marginBottom: 0}}>Geospatial Threat Map</h2>
+            <Network size={20} className="text-muted" />
+            <h2 className="heading-2" style={{marginBottom: 0}}>Network Infrastructure Graph</h2>
           </div>
-          <div className="map-container">
-            {/* Simulated Map UI */}
+          <div className="map-container" style={{background: 'rgba(0,0,0,0.6)'}}>
+            {/* Simulated Network Graph */}
             <div className="mock-map">
-              <div className="map-overlay"></div>
-              <div className="hotspot pulse-red" style={{ top: '60%', left: '30%' }}>
-                <span className="hotspot-label">Mumbai</span>
+              <svg width="100%" height="100%" style={{position: 'absolute', top: 0, left: 0}}>
+                <line x1="20%" y1="30%" x2="50%" y2="50%" stroke="var(--glass-highlight)" strokeWidth="2" />
+                <line x1="80%" y1="20%" x2="50%" y2="50%" stroke="var(--glass-highlight)" strokeWidth="2" />
+                <line x1="50%" y1="50%" x2="50%" y2="80%" stroke="var(--accent-red)" strokeWidth="2" strokeDasharray="5,5" />
+                <line x1="20%" y1="70%" x2="50%" y2="80%" stroke="var(--glass-highlight)" strokeWidth="2" />
+              </svg>
+              <div className="hotspot" style={{ top: '30%', left: '20%', background: 'var(--accent-blue)', boxShadow: '0 0 15px var(--accent-blue)' }}></div>
+              <div className="hotspot" style={{ top: '20%', left: '80%', background: 'var(--accent-blue)', boxShadow: '0 0 15px var(--accent-blue)' }}></div>
+              <div className="hotspot pulse-red" style={{ top: '50%', left: '50%', width: '30px', height: '30px' }}>
+                <span className="hotspot-label" style={{top: '40px'}}>Central Node (VoIP Server)</span>
               </div>
-              <div className="hotspot pulse-red" style={{ top: '75%', left: '45%' }}>
-                <span className="hotspot-label">Bengaluru</span>
+              <div className="hotspot pulse-yellow" style={{ top: '80%', left: '50%' }}>
+                <span className="hotspot-label">Money Mule Acc.</span>
               </div>
-              <div className="hotspot pulse-yellow" style={{ top: '40%', left: '50%' }}>
-                <span className="hotspot-label">Delhi NCR</span>
-              </div>
+              <div className="hotspot" style={{ top: '70%', left: '20%', background: 'var(--text-muted)' }}></div>
             </div>
           </div>
         </div>
@@ -97,7 +102,9 @@ const PoliceDashboard = () => {
                 </div>
                 <div className="alert-footer">
                   <span className={`status-badge ${alert.status.toLowerCase()}`}>{alert.status}</span>
-                  <button className="btn-link">View Details</button>
+                  <button className="btn-link" onClick={() => alert('Generating Cryptographically Hashed Admissible Evidence Package...')}>
+                    Generate Legal Package
+                  </button>
                 </div>
               </div>
             ))}
