@@ -1,145 +1,131 @@
 import React, { useState } from 'react';
-import { UploadCloud, AlertTriangle, CheckCircle, Search, FileText, Activity, Shield } from 'lucide-react';
+import { ShieldCheck, Scan, MessageSquareWarning, Languages, Upload, AlertTriangle, CheckCircle, Camera } from 'lucide-react';
 import './CitizenPortal.css';
 
 const CitizenPortal = () => {
-  const [inputText, setInputText] = useState('');
-  const [isScanning, setIsScanning] = useState(false);
-  const [result, setResult] = useState(null);
+  const [activeTab, setActiveTab] = useState('scam-check'); // scam-check, counterfeit
+  const [scanStatus, setScanStatus] = useState('idle'); // idle, scanning, safe, danger
 
-  const handleScan = () => {
-    if (!inputText.trim()) return;
-    setIsScanning(true);
-    setResult(null);
-    
-    // Simulate API delay
+  const simulateScan = () => {
+    setScanStatus('scanning');
     setTimeout(() => {
-      setIsScanning(false);
-      // Mock result logic based on keywords
-      const lowerText = inputText.toLowerCase();
-      if (lowerText.includes('arrest') || lowerText.includes('customs') || lowerText.includes('cbi') || lowerText.includes('skype')) {
-        setResult({
-          status: 'danger',
-          score: 98,
-          flags: [
-            "Impersonation of Law Enforcement (CBI/Customs)",
-            "Urgency/Threat of Arrest",
-            "Request to move to unrecorded platform (Skype/WhatsApp video)"
-          ],
-          verdict: "High Probability of Digital Arrest Scam. Disconnect immediately."
-        });
-      } else if (lowerText.includes('otp') || lowerText.includes('bank')) {
-        setResult({
-          status: 'warning',
-          score: 75,
-          flags: ["Request for sensitive financial info", "Urgency"],
-          verdict: "Potential Phishing Scam. Do not share OTPs."
-        });
-      } else {
-        setResult({
-          status: 'safe',
-          score: 12,
-          flags: ["No immediate threat detected"],
-          verdict: "Appears safe, but remain cautious."
-        });
-      }
+      setScanStatus('danger');
+    }, 2500);
+  };
+
+  const simulateCurrencyScan = () => {
+    setScanStatus('scanning');
+    setTimeout(() => {
+      setScanStatus('safe');
     }, 2500);
   };
 
   return (
     <div className="citizen-portal">
-      <div className="hero-section text-center">
-        <h1 className="heading-1 text-gradient">Citizen Fraud Shield</h1>
-        <p className="text-muted" style={{fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto 2rem'}}>
-          Paste a transcript, message, or email below. Our AI will instantly analyze it for patterns associated with Digital Arrests and financial fraud.
-        </p>
+      <div className="portal-header stagger-1">
+        <h1 className="heading-1">Citizen Fraud Shield</h1>
+        <p className="text-muted">AI-powered protection against digital arrest scams and counterfeit currency.</p>
+        <div className="language-selector">
+          <Languages size={16} /> <span>Language: English (Change to Hindi, Tamil, etc.)</span>
+        </div>
       </div>
 
-      <div className="scanner-layout">
-        <div className="input-section glass-panel">
-          <div className="panel-header">
-            <FileText size={20} className="text-muted" />
-            <h2 className="heading-2" style={{marginBottom: 0}}>Input Data</h2>
-          </div>
-          <textarea 
-            className="text-input" 
-            placeholder="Paste suspicious text here... (e.g., 'This is CBI. A parcel in your name containing illegal items was seized by customs. You are under digital arrest.')"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-          ></textarea>
-          
-          <button 
-            className="btn btn-primary" 
-            style={{width: '100%', marginTop: '1rem'}}
-            onClick={handleScan}
-            disabled={isScanning || !inputText.trim()}
-          >
-            {isScanning ? (
-              <>Scanning for Threats...</>
-            ) : (
-              <><Search size={18} /> Analyze with AI</>
+      <div className="portal-tabs stagger-2">
+        <button 
+          className={`tab-btn ${activeTab === 'scam-check' ? 'active' : ''}`}
+          onClick={() => { setActiveTab('scam-check'); setScanStatus('idle'); }}
+        >
+          <MessageSquareWarning size={18} /> Scam Assessment AI
+        </button>
+        <button 
+          className={`tab-btn ${activeTab === 'counterfeit' ? 'active' : ''}`}
+          onClick={() => { setActiveTab('counterfeit'); setScanStatus('idle'); }}
+        >
+          <Scan size={18} /> Counterfeit Note Scanner
+        </button>
+      </div>
+
+      <div className="portal-content stagger-3">
+        {activeTab === 'scam-check' && (
+          <div className="tool-card glass-panel">
+            <h2 className="heading-2">Verify Suspicious Calls & Messages</h2>
+            <p className="text-muted" style={{marginBottom: '2rem'}}>Upload an audio recording or paste a message. Our NLP engine will analyze coercive language patterns (e.g., fake CBI/Customs threats) with near-zero false positives.</p>
+            
+            {scanStatus === 'idle' && (
+              <div className="upload-zone interactive-hover" onClick={simulateScan}>
+                <Upload size={48} className="text-muted" style={{marginBottom: '1rem'}} />
+                <h3>Drop Audio Recording or Screenshot Here</h3>
+                <p className="text-muted">or click to browse</p>
+                <div className="demo-hint">Demo: Click to simulate scanning a "Digital Arrest" audio clip</div>
+              </div>
             )}
-          </button>
-        </div>
 
-        <div className="result-section glass-panel">
-          <div className="panel-header">
-            <Activity size={20} className="text-muted" />
-            <h2 className="heading-2" style={{marginBottom: 0}}>Analysis Report</h2>
-          </div>
-          
-          <div className="result-content">
-            {isScanning ? (
-              <div className="scanning-ui">
-                <div className="scanner-container">
-                   <div className="scanner-line"></div>
-                   <div className="code-block-mock">
-                     <div className="mock-line" style={{width: '60%'}}></div>
-                     <div className="mock-line" style={{width: '80%'}}></div>
-                     <div className="mock-line" style={{width: '40%'}}></div>
-                     <div className="mock-line" style={{width: '90%'}}></div>
-                   </div>
+            {scanStatus === 'scanning' && (
+              <div className="scanning-zone">
+                <div className="scanner-line-vertical"></div>
+                <div className="audio-wave">
+                  <span></span><span></span><span></span><span></span><span></span>
                 </div>
-                <p className="text-muted mt-2 text-center animate-pulse">Running NLP extraction and pattern matching...</p>
+                <h3>Transcribing & Analyzing NLP Patterns...</h3>
+                <p className="text-muted">Checking against known scam scripts & voice spoofing models.</p>
               </div>
-            ) : result ? (
-              <div className={`result-card ${result.status}`}>
-                <div className="score-circle">
-                  <span className="score-value">{result.score}%</span>
-                  <span className="score-label">Risk</span>
-                </div>
-                
-                <div className="verdict-box">
-                  {result.status === 'danger' && <AlertTriangle size={32} className="danger-icon animate-pulse-red" />}
-                  {result.status === 'warning' && <AlertTriangle size={32} className="warning-icon" />}
-                  {result.status === 'safe' && <CheckCircle size={32} className="safe-icon" />}
-                  <h3 style={{fontSize: '1.25rem', marginTop: '0.5rem'}}>{result.verdict}</h3>
-                </div>
+            )}
 
-                <div className="flags-list">
-                  <h4 style={{marginBottom: '0.5rem', color: 'var(--text-secondary)'}}>Detected Red Flags:</h4>
-                  {result.flags.map((flag, i) => (
-                    <div key={i} className="flag-item">
-                      <span className="bullet"></span>
-                      {flag}
-                    </div>
-                  ))}
+            {scanStatus === 'danger' && (
+              <div className="result-zone danger animate-pop">
+                <AlertTriangle size={64} color="var(--accent-red)" style={{marginBottom: '1rem'}} />
+                <h3 style={{color: 'var(--accent-red)', fontSize: '1.5rem'}}>HIGH RISK: Digital Arrest Scam Detected</h3>
+                <div className="analysis-details">
+                  <p><strong>Impersonation Vector:</strong> CBI / Customs</p>
+                  <p><strong>Coercive Language Detected:</strong> "immediate arrest", "money laundering", "do not disconnect"</p>
+                  <p><strong>Verdict:</strong> 99.8% match with known fraud compounds.</p>
                 </div>
-                
-                {result.status === 'danger' && (
-                  <button className="btn btn-outline" style={{width: '100%', marginTop: '1.5rem', borderColor: 'var(--accent-red)', color: 'var(--accent-red)'}}>
-                    Report to Cyber Crime (1930)
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div className="empty-state">
-                <Shield size={48} className="text-muted" style={{opacity: 0.5, marginBottom: '1rem'}} />
-                <p className="text-muted">Awaiting input for analysis.</p>
+                <div className="action-buttons">
+                  <button className="btn btn-primary" style={{background: 'var(--accent-red)'}}>Block Number & Report to NCRB</button>
+                  <button className="btn btn-outline" onClick={() => setScanStatus('idle')}>Scan Another</button>
+                </div>
               </div>
             )}
           </div>
-        </div>
+        )}
+
+        {activeTab === 'counterfeit' && (
+          <div className="tool-card glass-panel">
+            <h2 className="heading-2">Counterfeit Currency AI</h2>
+            <p className="text-muted" style={{marginBottom: '2rem'}}>Deployable on mobile or bank POS. Uses computer vision to verify microprint, security threads, and serial number patterns.</p>
+            
+            {scanStatus === 'idle' && (
+              <div className="upload-zone interactive-hover" onClick={simulateCurrencyScan}>
+                <Camera size={48} className="text-muted" style={{marginBottom: '1rem'}} />
+                <h3>Take a Photo of Currency Note</h3>
+                <p className="text-muted">Align the ₹500 note within the frame</p>
+                <div className="demo-hint">Demo: Click to simulate scanning a valid ₹500 note</div>
+              </div>
+            )}
+
+            {scanStatus === 'scanning' && (
+              <div className="scanning-zone currency-scan">
+                <div className="scanner-line"></div>
+                <div className="mock-note">₹500</div>
+                <h3 style={{marginTop: '2rem'}}>Running Computer Vision Analysis...</h3>
+                <p className="text-muted">Verifying Intaglio print and UV features.</p>
+              </div>
+            )}
+
+            {scanStatus === 'safe' && (
+              <div className="result-zone safe animate-pop">
+                <ShieldCheck size={64} color="var(--accent-green)" style={{marginBottom: '1rem'}} />
+                <h3 style={{color: 'var(--accent-green)', fontSize: '1.5rem'}}>VERIFIED: Genuine Currency</h3>
+                <div className="analysis-details" style={{borderColor: 'var(--accent-green)'}}>
+                  <p><strong>Denomination:</strong> ₹500</p>
+                  <p><strong>Security Thread:</strong> Validated (Color shift green to blue)</p>
+                  <p><strong>Micro-lettering:</strong> Legible ('RBI' and 'भारत')</p>
+                </div>
+                <button className="btn btn-primary" style={{marginTop: '1.5rem', background: 'var(--accent-green)', borderColor: 'var(--accent-green)'}} onClick={() => setScanStatus('idle')}>Scan Next Note</button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
