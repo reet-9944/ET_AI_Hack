@@ -233,3 +233,13 @@
   justify-content: center;
   margin-top: 2rem;
 }
+
+@media (max-width: 768px) {
+  .portal-tabs { flex-direction: column; gap: 0.5rem; }
+  .action-buttons { flex-direction: column; }
+  .action-buttons button { width: 100%; margin-bottom: 0.5rem; }
+  .result-zone { padding: 1.5rem 1rem; }
+  .analysis-details { margin: 1rem 0; padding: 1rem; font-size: 0.9rem; }
+  .tool-card { padding: 1.5rem; }
+  .heading-1 { font-size: 2rem; }
+}

@@ -212,3 +212,12 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 1rem; }
+  .hero-title { font-size: 2.2rem; }
+  .hero-subtitle { font-size: 1.1rem; }
+  .features-grid, .evaluation-grid { grid-template-columns: 1fr; }
+  .cta-group { flex-direction: column; width: 100%; }
+  .cta-group button { width: 100%; }
+}
